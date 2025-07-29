@@ -1,53 +1,59 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Random;
+// NumberGuessing.java
+// A simple number guessing game for DevOps coursework
+// Includes input validation and limited number of attempts
+
+import java.util.*;
 
 public class NumberGuessing {
 
+    // Function to handle the number guessing game logic
     public static void guessingNumberGame() {
-        Scanner sc = new Scanner(System.in);
-        Random rand = new Random();
-
-        int numberToGuess = 1 + rand.nextInt(100);
-        int maxAttempts = 5;
+        // Scanner to read user input
+        final Scanner sc = new Scanner(System.in);
+        
+        // Generate a random number between 1 and 100
+        int number = 1 + (int)(100 * Math.random());
+        int attempts = 5;
 
         System.out.println("A number is chosen between 1 and 100.");
-        System.out.println("You have " + maxAttempts + " attempts to guess the correct number.");
+        System.out.println("You have " + attempts + " attempts to guess the correct number.");
 
-        int i;
-        for (i = 0; i < maxAttempts; i++) {
+        int guessCount = 0;
+        while (guessCount < attempts) {
             System.out.print("Enter your guess: ");
-
             int guess;
 
-            try {
-                guess = sc.nextInt();
-            } catch (InputMismatchException e) {
+            // Handle non-integer input safely
+            if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");
-                sc.next(); // Clear the invalid input
-                i--;       // Retry this attempt
+                sc.next(); // skip invalid input
                 continue;
             }
 
-            if (guess == numberToGuess) {
+            guess = sc.nextInt();
+            guessCount++;
+
+            // Give feedback on the guess
+            if (guess == number) {
                 System.out.println("Congratulations! You guessed the number.");
                 break;
-            } else if (guess > numberToGuess) {
+            } else if (guess > number) {
                 System.out.println("The number is smaller than " + guess);
             } else {
                 System.out.println("The number is greater than " + guess);
             }
         }
 
-        if (i == maxAttempts) {
-            System.out.println("You've used all attempts. The number was " + numberToGuess);
+        // If no correct guess after attempts
+        if (guessCount == attempts) {
+            System.out.println("You've used all attempts. The number was " + number);
         }
 
         System.out.println("Bye-bye!");
     }
 
+    // Main method to run the game
     public static void main(String[] args) {
         guessingNumberGame();
     }
 }
-
